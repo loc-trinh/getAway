@@ -35,11 +35,11 @@ router.get('/', function(req, res, next) {
 					console.log(body.results[i]);
 					var locationData = getCityCodeData(body.results[i].destination);
 					body.results[i].locationData = locationData;
-					getImage(locationData.city, function(images) {
+					/*getImage(locationData.city, function(images) {
 						body.results[i].images = images;
-						i++;
-						next();
-					});
+					});*/
+					i++;
+					next();
 				}
 				else {
 					res.json(body);

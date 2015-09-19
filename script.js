@@ -7,20 +7,44 @@ function queryString(query) {var str = ''; for (var key in query) {if (query.has
 
 //console.log(getCityCodeData('New York'));
 
-
 var codeMap = JSON.parse(fs.readFileSync('./cityCodes.json').toString());
+var temp = [];
 for (var code in codeMap) {
 	if (codeMap.hasOwnProperty(code)) {
-		var data = codeMap[code];
-		getImage(data.city, function(images) {
-			console.log(images);
-		});
+		temp.push(code);
 	}
 }
 
-getImage('cat', function(images) {
+var i = 0;
+next();
+function next() {
+	if (i < temp.length) {
+		if (!codeMap[temp[i]].images) {
+			console.log(i);
+			getImage(codeMap[temp[i]].city_name, function(images) {
+				codeMap[temp[i]].images = images;
+				console.log();
+				console.log();
+				console.log(JSON.stringify(codeMap));
+				fs.writeFileSync('./cityCodes.json', JSON.stringify(codeMap));
+				console.log(i + 1 + ' / ' + temp.length);
+				i++;
+				next();
+			});
+		}
+		else {
+			i++;
+			next();
+		}
+	}
+	else {
+		console.log('done');
+	}
+}
+
+/*getImage('cat', function(images) {
 	console.log(images);
-});
+});*/
 
 /*var temp = fs.readFileSync('./IATACityCodes.txt').toString().split('\n');
 var locations = [];
@@ -168,7 +192,7 @@ function next1() {
 }*/
 
 function getImage(str, callback) {
-	var url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' + encodeURI(str);
+	var url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=' + encodeURI(str);
 	request.get(url, function (error, response, body){
 		if (error) {
 			console.log(error);
