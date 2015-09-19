@@ -23,9 +23,9 @@ function next() {
 			console.log(i);
 			getImage(codeMap[temp[i]].city_name, function(images) {
 				codeMap[temp[i]].images = images;
-				console.log();
-				console.log();
-				console.log(JSON.stringify(codeMap));
+				//console.log();
+				//console.log();
+				//console.log(JSON.stringify(codeMap));
 				fs.writeFileSync('./cityCodes.json', JSON.stringify(codeMap));
 				console.log(i + 1 + ' / ' + temp.length);
 				i++;
