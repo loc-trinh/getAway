@@ -3,3 +3,14 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+    form(action='http://127.0.0.1:3000/get_info', method='get')
+      | Budget: 
+      input(type='text', name='budget')
+      br
+      | Party: 
+      input(type='text', name='party')
+      br
+      | Staring location: 
+      input(type='text', name='starting_location')
+      br
+      input(type='submit', value='Submit')
