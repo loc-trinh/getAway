@@ -2,72 +2,210 @@
 var request = require('request');
 var fs = require('fs');
 
-getLocations('Boston');
+var key = '51QA3bKjAPpP4fvw75KxEIfMHSnxgcZW';
+function queryString(query) {var str = ''; for (var key in query) {if (query.hasOwnProperty(key) && query[key]) {if (!str) {str += '?' + key + '=' + query[key]; } else {str += '&' + key + '=' + query[key]; } } } return str; }
 
-function getLocations(originStr) {
-	var origin = iataCityCode(originStr);
-	var query = {
-			apikey: 'NIht6DjAks1ZxOTkj2KWKRphIxhKxcGs',
-			origin: origin,
-			destination: null,
-			departure_date: '2015-10-06',
-			duration: 7,
-			direct: false,
-			max_price: 500,
-			aggregation_mode: 'DESTINATION'
-	};
-	var url = 'http://api.sandbox.amadeus.com/v1.2/flights/inspiration-search' + queryString(query);
+//console.log(getCityCodeData('New York'));
 
+
+var codeMap = JSON.parse(fs.readFileSync('./cityCodes.json').toString());
+for (var code in codeMap) {
+	if (codeMap.hasOwnProperty(code)) {
+		var data = codeMap[code];
+		getImage(data.city, function(images) {
+			console.log(images);
+		});
+	}
+}
+
+getImage('cat', function(images) {
+	console.log(images);
+});
+
+/*var temp = fs.readFileSync('./IATACityCodes.txt').toString().split('\n');
+var locations = [];
+for (var i = 0; i < temp.length; i++) {
+	if (temp) {
+		locations.push(temp[i].replace(/^(\s*)|(\s*)$/g, '').replace(/\s+/g, ' '));
+	}
+}
+var codeMap = {};
+var i = 0;
+next();
+function next() {
+	if (i < locations.length) {
+		console.log(i + 1 + ' / ' + locations.length);
+		var code = locations[i].slice(locations[i].length - 3);
+		getLocationData(code, function(data) {
+			if (data) {
+				console.log(code);
+				console.log(data);
+				codeMap[code] = data;
+				console.log(JSON.stringify(codeMap));
+			}
+			i++;
+			next();
+		});
+	}
+	else {
+		
+	}
+}*/
+
+function getCityCodeData(str) {
+	str = str.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
+	var terms = str.split(' ');	
+	var codeMap = JSON.parse(fs.readFileSync('./cityCodes.json').toString());
+	var data = null;
+	var bestMatchCount = 0;
+	for (var location in codeMap) {
+		if (codeMap.hasOwnProperty(location)) {
+			var str = codeMap[location].code + ' ' + codeMap[location].name + ' ' + codeMap[location].city_code + ' ' + codeMap[location].city_name + ' ' + codeMap[location].state + ' ' + codeMap[location].country;
+			var matchCount = 0;
+			for (var j = 0; j < terms.length; j++) {
+				if (str.toLowerCase().match(terms[j].toLowerCase())) {
+					matchCount += 1;
+				}
+			}
+			if (matchCount > bestMatchCount) {
+				//console.log(codeMap[location].city_name);
+				data = codeMap[location];
+				bestMatchCount = matchCount;
+			}
+		}
+	}
+	if (data) {
+		return {
+			code: data.city_code,
+			city: data.city_name,
+			state: data.state,
+			country: data.country,
+			timezone: data.timezone
+		};
+	}
+	return null;
+}
+
+/*var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var codeMap = {};
+
+var i = 0;
+next();
+function next() {
+	if (i < alphabet.length) {
+		var letter = alphabet[i];
+		console.log(letter);
+		getLocationData(letter, function(data) {
+			if (data) {
+				for (var j = 0; j < data.length; j++) {
+					codeMap[data[j].value] = data[j].label;
+				}
+			}
+			console.log(JSON.stringify(codeMap));
+			i++;
+			next();
+		});
+	}
+	else {
+		
+	}
+}*/
+
+/*var i = 0;
+next1();
+function next1() {
+	if (i < alphabet.length) {
+		var j = 0;
+		next2();
+		function next2() {
+			if (j < alphabet.length) {
+				var k = 0;
+				next3();
+				function next3() {
+					if (k < alphabet.length) {
+						var code = alphabet[i] + alphabet[j] + alphabet[k];
+						getLocationData(code, function(data) {
+							if (data) {
+								codeMap[code] = data;
+								console.log(JSON.stringify(codeMap));
+								console.log(code + ' - ' + data.city_name);
+							}
+							k++;
+							next3();
+						});
+					}
+					else {
+						j++;
+						next2();
+					}
+				}
+			}
+			else {
+				i++;
+				next1();
+			}
+		}
+	}
+	else {
+		console.log(JSON.stringify(codeMap));
+	}
+}*/
+
+/*for (var i = 0; i < alphabet.length; i++) {
+	for (var j = 0; j < alphabet.length; j++) {
+		for (var k = 0; k < alphabet.length; k++) {
+			var code = alphabet[i] + alphabet[j] + alphabet[k];
+			console.log(code);
+			getLocationData(code, function(data) {
+				if (data) {
+					console.log(code + ' - ' + data.city_name);
+					codeMap[code] = data;
+					console.log(JSON.stringify(codeMap));
+				}
+			});
+		}
+	}
+}*/
+
+function getImage(str, callback) {
+	var url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' + encodeURI(str);
 	request.get(url, function (error, response, body){
 		if (error) {
 			console.log(error);
 		}
 		else {
-			console.log(body);
+			try {
+				var results = JSON.parse(body).responseData.results;
+			    var images = [];
+			    for (var i = 0; i < results.length; i++) {
+			    	images.push(results[i].unescapedUrl);
+			    }
+			    callback(images);
+			} catch(e) {
+				console.log(body);
+				throw e;
+			}
 		}
 	});
 }
 
-function iataCityCode(str) {
-	str = str.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
-	var terms = str.split(' ');	
-	var temp = fs.readFileSync('./IATACityCodes.txt').toString().split('\n');
-	var locations = [];
-	for (var i = 0; i < temp.length; i++) {
-		if (temp) {
-			locations.push(temp[i].replace(/^(\s*)|(\s*)$/g, '').replace(/\s+/g, ' '));
-		}
+function getLocationData(str, callback) {
+	var query = {
+			apikey: key
 	}
-	var code = null;
-	var bestMatchCount = 0;
-	for (var i = 0; i < locations.length; i++) {
-		var matchCount = 0;
-		for (var j = 0; j < terms.length; j++) {
-			if (locations[i].toLowerCase().match(terms[j].toLowerCase())) {
-				matchCount += 1;
-			}
+	var url = 'https://api.sandbox.amadeus.com/v1.2/location/' + str+ queryString(query);
+	request.get(url, function (error, response, body){
+		if (error) {
+			console.log(error);
 		}
-		if (matchCount > bestMatchCount) {
-			console.log(locations[i]);
-			code = locations[i].slice(locations[i].length - 3);
-			bestMatchCount = matchCount;
-		}
-	}
-	console.log(code);
-	return code;
-}
-
-function queryString(query) {
-	var str = '';
-	for (var key in query) {
-		if (query.hasOwnProperty(key) && query[key]) {
-			if (!str) {
-				str += '?' + key + '=' + query[key];
+		else {
+			var data = JSON.parse(body).airports;
+			if (data) {
+				callback(data[0]);
 			}
 			else {
-				str += '&' + key + '=' + query[key];
+				callback(undefined);
 			}
 		}
-	}
-	return str;
+	});
 }
