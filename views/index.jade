@@ -1,16 +1,27 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div(id="query")
+    h1 getAway
     form(action='http://127.0.0.1:3000/get_info', method='get')
-      | Budget: 
-      input(type='text', name='budget')
+      | BUDGET:     
+      input(type='text', name='budget', placeholder="$500")
       br
-      | Party: 
-      input(type='text', name='party')
+      | START: 
+      input(type='text', name='starting_location',placeholder="Boston, MA", class="indent")
       br
-      | Staring location: 
-      input(type='text', name='starting_location')
+      | PARTY: 
+      input(type='text', name='party',placeholder="Party of 5", class="indent")
       br
-      input(type='submit', value='Submit')
+      | DATE : 
+      input(type='text', name='date', placeholder= dateString, class="indent2", id="datepicker")
+      br
+      button(type='submit', value='Submit') Submit
+  link(rel='stylesheet', href='//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
+  script(src='//code.jquery.com/jquery-1.10.2.js')
+  script(src='//code.jquery.com/ui/1.11.4/jquery-ui.js')
+  script(src='../public/javascripts/myscript.js')
+  script.
+    $(function() {
+    $( "#datepicker" ).datepicker();
+    });

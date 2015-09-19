@@ -1,8 +1,101 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url('http://fonts.googleapis.com/css?family=Open+Sans');
+@import url('http://fonts.googleapis.com/css?family=Quicksand');
+
+html{
+  background: url(../images/test.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-a {
-  color: #00B7FF;
+body, html{
+	margin: 0px;
+	padding: 0px;
+	font-family: "Quicksand";
+}
+body{
+	text-align: center;
+	-webkit-animation:.8s unveil;
+}
+
+@-webkit-keyframes unveil{
+	0%{opacity:0}
+	100%{opacity:1}
+}
+
+#query{
+	width: 50vw;
+	background:rgba(0,0,0,.7);
+	margin: 0px auto;
+	margin-top: 25vh;
+	padding: 20px 40px;
+	border: 1px solid rgba(0,0,0,.7);
+	border-radius: 15px;
+	color: white;
+	text-align: left;
+	font-size: 17pt;
+}
+#query h1{
+	width: 100%;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	margin: 0px auto;
+	margin-bottom: 20px;
+	font-size: 30pt;
+}
+
+#query input{
+	width: 37vw;
+	font-weight: 100;
+	font-size: 17pt;
+	margin-top: 6px;
+	color: white;
+	background: none;
+	border: none;
+	border-bottom: 1px solid transparent;
+	margin-left: 5px;
+}
+
+#query input:hover{
+	transition: all .5s ease;
+	border-bottom: 1px solid white;
+}
+
+#query input:focus{
+	outline: 0;
+	border-bottom: 1px solid white;
+}
+
+#query button{
+	cursor: pointer;
+	margin-top: 20px;
+	background: none;
+	border: 1px solid rgba(255,255,255,.6);
+	padding: 10px 30px;
+	color: white;
+	font-size: 13pt;
+
+	margin-top: 40px;
+	margin-bottom: 5px;
+	margin-left: 40%;
+}
+
+#query .indent{
+	margin-left: 28px;
+}
+#query .indent2{
+	margin-left: 36px;
+}
+
+#query button:hover{
+	transition: all .5s ease;
+	border: 1px solid white;
+}
+
+@media (max-width: 800px) {
+	#query .indent{
+		margin-left: 5px;
+	}
 }
