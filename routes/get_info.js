@@ -36,8 +36,13 @@ router.get('/', function(req, res, next) {
 						var locationData = getCityCodeData(body.results[i].destination);
 						body.results[i].locationData = locationData;
 					}
+					res.render('city', { results: body.results });
 				}
-				res.render('city', { results: body.results });
+				else {
+					var error = new Error('Not Found');
+					error.status = 404;
+					res.render('error', { error: error, message: 'No results found' });
+				}
 			}
 		});
 	}
@@ -55,7 +60,6 @@ function getImage(str, callback) {
 			console.log(error);
 		}
 		else {
-			console.log(body);
 			var results = JSON.parse(body).responseData.results;
 		    var images = [];
 		    for (var i = 0; i < results.length; i++) {
@@ -87,7 +91,6 @@ function getCityCodeData(str) {
 				}
 			}
 			if (matchCount > bestMatchCount) {
-				//console.log(codeMap[location].city_name);
 				data = codeMap[location];
 				bestMatchCount = matchCount;
 			}

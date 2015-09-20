@@ -1,5 +1,6 @@
 extends layout
 
 block content
-  each item in images
-    img(src=item)
+  each destination in results
+    if destination.locationData
+      img(src=destination.locationData.images[0], width="100px", height="100px")
