@@ -1,7 +1,10 @@
 extends layout
 
 block content
-  each destination in results
-    if destination.locationData
-      a(href=destination.locationData.city)
-        img(src=destination.locationData.images[0], width="100px", height="100px")
+	link(rel='stylesheet', href='/stylesheets/mystery.css')
+	div(id="container")
+		each destination in results
+			if destination.locationData
+				div(class="frame")
+					a(href=destination.locationData.city)
+						img(src=destination.locationData.images[0], width="100%", height="300px")
