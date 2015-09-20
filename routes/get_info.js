@@ -111,7 +111,8 @@ function getCityCodeData(str) {
 			city: data.city_name,
 			state: data.state,
 			country: data.country,
-			timezone: data.timezone
+			timezone: data.timezone,
+			images: data.images
 		};
 	}
 	return null;
