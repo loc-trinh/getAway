@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
 					next();
 				}
 				else {
-					res.json(body);
+					res.render('city', {images:body.results[0].locationData.images});
 				}
 			}
 		}
