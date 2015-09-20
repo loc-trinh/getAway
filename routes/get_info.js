@@ -9,6 +9,7 @@ function queryString(query) {var str = ''; for (var key in query) {if (query.has
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	var locationData = getCityCodeData(req.query.starting_location);
+	console.log(locationData);
 	var origin = locationData.code;
 	var max_price = req.query.budget || 1000;
 	query = {
@@ -28,23 +29,14 @@ router.get('/', function(req, res, next) {
 		}
 		else {
 			var body = JSON.parse(body);
-			var i = 0;
-			next();
-			function next() {
-				if (i < body.results.length) {
+			if (body.results) {
+				for (var i = 0; i < body.results.length; i++) {
 					console.log(body.results[i]);
 					var locationData = getCityCodeData(body.results[i].destination);
 					body.results[i].locationData = locationData;
-					/*getImage(locationData.city, function(images) {
-						body.results[i].images = images;
-					});*/
-					i++;
-					next();
-				}
-				else {
-					res.json(body);
 				}
 			}
+			res.render('city', { results: body.results });
 		}
 	});
 });
