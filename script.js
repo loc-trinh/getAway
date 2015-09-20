@@ -9,15 +9,23 @@ function queryString(query) {var str = ''; for (var key in query) {if (query.has
 //console.log(getCityCodeData('New York'));
 
 var codeMap = JSON.parse(fs.readFileSync('./cityCodes.json').toString());
+
+var fixes = [ 'Phoenix', 'Madison', 'Columbus', 'Santa Ana', 'Kingston', 'Shannon', 'Ontario', 'Quebec', 'Sint Maarten', 'Cork', 'Luxembourg', 'Jackson', 'Syracuse', 'Bethel', 'Appleton', 'Male' ];
 var temp = [];
 for (var code in codeMap) {
 	if (codeMap.hasOwnProperty(code)) {
+		/*for (var f = 0; f < fixes.length; f++) {
+			if (codeMap[code].city_name === fixes[f]) {
+				temp.push(code);
+				break;
+			}
+		}*/
 		temp.push(code);
 		//console.log(codeMap[code].city_name);
 	}
 }
-
-var i = 0;
+	
+/*var i = 0;
 next();
 function next() {
 	if (i < temp.length) {
@@ -42,7 +50,7 @@ function next() {
 	else {
 		console.log('done');
 	}
-}
+}*/
 
 /*getImage('cat', function(images) {
 	console.log(images);
@@ -198,7 +206,7 @@ function next1() {
 	}
 }*/
 
-/*function getImage(str, callback) {
+function getImage(str, callback) {
 	var url = 'https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=' + encodeURI(str);
 	request.get(url, function (error, response, body){
 		if (error) {
@@ -218,9 +226,9 @@ function next1() {
 			}
 		}
 	});
-}*/
+}
 
-function getImage(str, callback) {
+/*function getImage(str, callback) {
 	var keys = {
 		api_key: 'a53a6f34b57be63e95812832ccfd4c2a'
 		//secret: '21370d52815c991a'
@@ -240,7 +248,7 @@ function getImage(str, callback) {
 			callback(images);
 		}
 	});
-}
+}*/
 
 function getLocationData(str, callback) {
 	var query = {
