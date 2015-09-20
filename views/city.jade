@@ -3,4 +3,5 @@ extends layout
 block content
   each destination in results
     if destination.locationData
-      img(src=destination.locationData.images[0], width="100px", height="100px")
+      a(href=destination.locationData.city)
+        img(src=destination.locationData.images[0], width="100px", height="100px")
