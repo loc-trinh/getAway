@@ -1,6 +1,7 @@
 
 var request = require('request');
 var fs = require('fs');
+var Flickr = require('node-flickr');
 
 var key = '51QA3bKjAPpP4fvw75KxEIfMHSnxgcZW';
 function queryString(query) {var str = ''; for (var key in query) {if (query.hasOwnProperty(key) && query[key]) {if (!str) {str += '?' + key + '=' + query[key]; } else {str += '&' + key + '=' + query[key]; } } } return str; }
@@ -8,26 +9,34 @@ function queryString(query) {var str = ''; for (var key in query) {if (query.has
 //console.log(getCityCodeData('New York'));
 
 var codeMap = JSON.parse(fs.readFileSync('./cityCodes.json').toString());
+
+var fixes = [ 'Phoenix', 'Madison', 'Columbus', 'Santa Ana', 'Kingston', 'Shannon', 'Ontario', 'Quebec', 'Sint Maarten', 'Cork', 'Luxembourg', 'Jackson', 'Syracuse', 'Bethel', 'Appleton', 'Male' ];
 var temp = [];
 for (var code in codeMap) {
 	if (codeMap.hasOwnProperty(code)) {
+		/*for (var f = 0; f < fixes.length; f++) {
+			if (codeMap[code].city_name === fixes[f]) {
+				temp.push(code);
+				break;
+			}
+		}*/
 		temp.push(code);
-		console.log(codeMap[code].city_name);
+		//console.log(codeMap[code].city_name);
 	}
 }
-
+	
 /*var i = 0;
 next();
 function next() {
 	if (i < temp.length) {
 		if (!codeMap[temp[i]].images) {
-			console.log(i);
 			getImage(codeMap[temp[i]].city_name, function(images) {
 				codeMap[temp[i]].images = images;
 				//console.log();
 				//console.log();
 				//console.log(JSON.stringify(codeMap));
 				fs.writeFileSync('./cityCodes.json', JSON.stringify(codeMap));
+				console.log(images);
 				console.log(i + 1 + ' / ' + temp.length);
 				i++;
 				next();
@@ -218,6 +227,28 @@ function getImage(str, callback) {
 		}
 	});
 }
+
+/*function getImage(str, callback) {
+	var keys = {
+		api_key: 'a53a6f34b57be63e95812832ccfd4c2a'
+		//secret: '21370d52815c991a'
+	};
+	var flickr = new Flickr(keys);
+	flickr.get('photos.search', { tags: str + " city"}, function(err, result){
+		if (err) {
+			console.log(err);
+		}
+		else {
+			var photos = result.photos.photo;
+			var images = [];
+			for (var p = 0; p < photos.length; p++) {
+				var url = 'https://farm' + photos[p].farm + '.staticflickr.com/' + photos[p].server + '/' + photos[p].id + '_' + photos[p].secret + '.jpg';
+				images.push(url);
+			}
+			callback(images);
+		}
+	});
+}*/
 
 function getLocationData(str, callback) {
 	var query = {
