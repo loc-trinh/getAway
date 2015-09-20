@@ -12,10 +12,11 @@ var temp = [];
 for (var code in codeMap) {
 	if (codeMap.hasOwnProperty(code)) {
 		temp.push(code);
+		console.log(codeMap[code].city_name);
 	}
 }
 
-var i = 0;
+/*var i = 0;
 next();
 function next() {
 	if (i < temp.length) {
@@ -40,7 +41,7 @@ function next() {
 	else {
 		console.log('done');
 	}
-}
+}*/
 
 /*getImage('cat', function(images) {
 	console.log(images);
@@ -91,8 +92,12 @@ function getCityCodeData(str) {
 					matchCount += 1;
 				}
 			}
+			if (str.toLowerCase().matches('London')) {
+				console.log(str);
+				console.log(matchCount);
+			}
 			if (matchCount > bestMatchCount) {
-				//console.log(codeMap[location].city_name);
+				console.log(codeMap[location].city_name);
 				data = codeMap[location];
 				bestMatchCount = matchCount;
 			}
@@ -104,7 +109,8 @@ function getCityCodeData(str) {
 			city: data.city_name,
 			state: data.state,
 			country: data.country,
-			timezone: data.timezone
+			timezone: data.timezone,
+			images: data.images
 		};
 	}
 	return null;
