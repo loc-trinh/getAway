@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  link(rel='stylesheet', href='/stylesheets/style.css')
   div(id="query")
     h1 getAway
     form(action='http://127.0.0.1:3000/get_info', method='get')
